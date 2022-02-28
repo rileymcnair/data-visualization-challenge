@@ -17,18 +17,24 @@
     </nav>
     
     <div class="topbar">
-        <a href="/week/0">prev week </a>
-        <a href="/week/1">next week</a>
-        <a href="/day/1">day 1 <%= cToF(weekWeather[0].tempmax) %> </a>
-        <a href="/day/2">day 2 <%= cToF(weekWeather[1].tempmax) %> </a>
-        <a href="/day/3">day 3 <%= cToF(weekWeather[2].tempmax) %> </a>
-        <a href="/day/4">day 4 <%= cToF(weekWeather[3].tempmax) %> </a>
-        <a href="/day/5">day 5 <%= cToF(weekWeather[4].tempmax )%> </a>
-        <a href="/day/6">day 6 <%= cToF(weekWeather[5].tempmax) %> </a>
-        <a href="/day/7">day 7 <%= cToF(weekWeather[6].tempmax) %> </a>
+        <a href="/week/prev">prev week </a>
+        <a href="/week/next">next week</a>
+        <a href="/day/1"><%= weekWeather[0].datetime %> Temp: <%= cToF(weekWeather[0].tempmax) %> </a>
+        <a href="/day/2"><%= weekWeather[1].datetime %> <%= cToF(weekWeather[1].tempmax) %> </a>
+        <a href="/day/3"><%= weekWeather[2].datetime %> <%= cToF(weekWeather[2].tempmax) %> </a>
+        <a href="/day/4"><%= weekWeather[3].datetime %> <%= cToF(weekWeather[3].tempmax) %> </a>
+        <a href="/day/5"><%= weekWeather[4].datetime %> <%= cToF(weekWeather[4].tempmax )%> </a>
+        <a href="/day/6"><%= weekWeather[5].datetime %> <%= cToF(weekWeather[5].tempmax) %> </a>
+        <a href="/day/7"><%= weekWeather[6].datetime %> <%= cToF(weekWeather[6].tempmax) %> </a>
     </div>
 
     <h1>temp: <%= cToF(current.temp) %> </h1>
+
+    <style>
+        .topbar> a {
+            margin: 50%;
+        }
+    </style>
 
 </body>
 </html>
