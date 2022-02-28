@@ -1,1 +1,38 @@
-<h1>hello world</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- local bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <!-- test header to see if bootstrap working -->
+    <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand" href="/">FutureCast</a>
+    </nav>
+    
+    <div class="topbar">
+        <a href="/week/0">prev week </a>
+        <a href="/week/1">next week</a>
+        <a href="/day/1">day 1 <%= cToF(weekWeather[0].tempmax) %> </a>
+        <a href="/day/2">day 2 <%= cToF(weekWeather[1].tempmax) %> </a>
+        <a href="/day/3">day 3 <%= cToF(weekWeather[2].tempmax) %> </a>
+        <a href="/day/4">day 4 <%= cToF(weekWeather[3].tempmax) %> </a>
+        <a href="/day/5">day 5 <%= cToF(weekWeather[4].tempmax )%> </a>
+        <a href="/day/6">day 6 <%= cToF(weekWeather[5].tempmax) %> </a>
+        <a href="/day/7">day 7 <%= cToF(weekWeather[6].tempmax) %> </a>
+    </div>
+
+    <h1>temp: <%= cToF(current.temp) %> </h1>
+
+</body>
+</html>
+<script src="/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+      
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script>
+
