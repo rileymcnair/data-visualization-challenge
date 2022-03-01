@@ -29,6 +29,7 @@ class WeatherData {
         this.current = current
         this.days = days
         this.currWeek = 1
+        this.daySelection = current
     }
     *getTemp() {
         return this.current.temp
@@ -94,18 +95,20 @@ var weatherState = new WeatherData(current, DATA)
 // })
 
 router.get('/', (req,res) => {
-    console.log(weatherState.days)
+    //console.log(weatherState.days)
     weatherState.currWeek = 1
     const weekWeather = weatherState.week(weatherState.currWeek)
-    console.log('printing weather for the week')
-    console.log(weekWeather)
+    // console.log('printing weather for the week')
+    // console.log(weekWeather)
     const current = weatherState.current
     //console.log(`current temp is: ${current.temp}`)
+    const isCurrent = (weatherState.current==weatherState.daySelection)
 
     res.render('index', {
         current: current, 
         weekWeather: weekWeather,
-        cToF: cToF //celsius to fahrenheit function
+        cToF: cToF, //celsius to fahrenheit function
+        isCurrent: isCurrent
     })
 })
 
@@ -123,21 +126,32 @@ router.get('/week/:dir', (req,res)=> {
     const weekWeather = weatherState.week(weatherState.currWeek)
     // console.log(`weekWeather for week ${weatherState.currWeek}:`)
     // console.log(weekWeather)
+    const isCurrent = (weatherState.current==weatherState.daySelection)
     const current = weatherState.current
     res.render('index', {
         weekWeather: weekWeather,
-        current: current,
-        cToF: cToF
+        current: weatherState.daySelection,
+        cToF: cToF,
+        isCurrent: isCurrent
     })
 })
 
 router.get('/day/:id', (req,res)=> {
-    const day = req.params.id
-    console.log(`day is ${day}`)
+    const day = req.params.id //convert day number to int
+    const dayNum = Number(day)
     if(!day){
-        console.log('failed')
+        console.log('invalid day')
     }
-    res.render('index',{temp: 20} )
+    const weekWeather = weatherState.week(weatherState.currWeek)
+    weatherState.daySelection = weekWeather[dayNum]
+    //console.log(weatherState.daySelection)
+    const isCurrent = (weatherState.current==weatherState.daySelection)
+    res.render('index', {
+        current: weatherState.daySelection, 
+        weekWeather: weekWeather,
+        cToF: cToF,
+        isCurrent: isCurrent
+    })
 })
 
 

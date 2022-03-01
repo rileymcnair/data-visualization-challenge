@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>FutureCast</title>
 
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <!-- local bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
@@ -19,20 +20,32 @@
     <div class="topbar">
         <a href="/week/prev">prev week </a>
         <a href="/week/next">next week</a>
-        <a href="/day/1"><%= weekWeather[0].datetime %> Temp: <%= cToF(weekWeather[0].tempmax) %> </a>
-        <a href="/day/2"><%= weekWeather[1].datetime %> <%= cToF(weekWeather[1].tempmax) %> </a>
-        <a href="/day/3"><%= weekWeather[2].datetime %> <%= cToF(weekWeather[2].tempmax) %> </a>
-        <a href="/day/4"><%= weekWeather[3].datetime %> <%= cToF(weekWeather[3].tempmax) %> </a>
-        <a href="/day/5"><%= weekWeather[4].datetime %> <%= cToF(weekWeather[4].tempmax )%> </a>
-        <a href="/day/6"><%= weekWeather[5].datetime %> <%= cToF(weekWeather[5].tempmax) %> </a>
-        <a href="/day/7"><%= weekWeather[6].datetime %> <%= cToF(weekWeather[6].tempmax) %> </a>
+        <a href="/day/0"><%= weekWeather[0].datetime %> Temp: <%= cToF(weekWeather[0].tempmax) %> </a>
+        <a href="/day/1"><%= weekWeather[1].datetime %> <%= cToF(weekWeather[1].tempmax) %> </a>
+        <a href="/day/2"><%= weekWeather[2].datetime %> <%= cToF(weekWeather[2].tempmax) %> </a>
+        <a href="/day/3"><%= weekWeather[3].datetime %> <%= cToF(weekWeather[3].tempmax) %> </a>
+        <a href="/day/4"><%= weekWeather[4].datetime %> <%= cToF(weekWeather[4].tempmax )%> </a>
+        <a href="/day/5"><%= weekWeather[5].datetime %> <%= cToF(weekWeather[5].tempmax) %> </a>
+        <a href="/day/6"><%= weekWeather[6].datetime %> <%= cToF(weekWeather[6].tempmax) %> </a>
+    </div>
+    <div class="day-card">
+        <h1>temp: <%= isCurrent? cToF(current.temp) : cToF(current.tempmax) %> </h1>
     </div>
 
-    <h1>temp: <%= cToF(current.temp) %> </h1>
-
     <style>
-        .topbar> a {
-            margin: 50%;
+        .topbar {
+            margin: 10px 10px;
+            display: flex;
+            column-gap: 10px;
+            flex-wrap: wrap;
+        }
+        .topbar > a {
+            border: 1px solid blue;
+        }
+        .day-card {
+            margin: 20px 20px;
+            height: 500px;
+            border: 1px solid blue;
         }
     </style>
 
@@ -40,5 +53,5 @@
 </html>
 <script src="/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
       
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script> -->
 
