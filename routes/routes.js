@@ -42,12 +42,11 @@ class WeatherData {
 
 }
 
-const datafunc = require('../data.js')
-const DATA = datafunc()
-const current = {
-    temp: 15
-}
-var weatherState = new WeatherData(current, DATA)
+const {data} = require('../data.js')
+const {current} = require('../data.js')
+const DATA = data()
+const currentData = current()
+var weatherState = new WeatherData(currentData, DATA)
 
 
 
@@ -58,11 +57,13 @@ var weatherState = new WeatherData(current, DATA)
 
 //     .then( apires => {
 //         const current = apires.data.currentConditions
+//         console.log(current)
 //         const currentTemp = current.temp
 //         const currentWindSpeed = current.windspeed
 //         const currentCondition = current.conditions
 //         const currentHumidity = current.humidity
 //         const days = apires.data.days // list of daily forecasts
+//         console.log(days)
 //         weatherState = new WeatherData(current, days)
 //     })
 //     .catch(err => {
@@ -101,9 +102,10 @@ router.get('/', (req,res) => {
     // console.log('printing weather for the week')
     // console.log(weekWeather)
     const current = weatherState.current
-    //console.log(`current temp is: ${current.temp}`)
-    const isCurrent = (weatherState.current==weatherState.daySelection)
-
+    // console.log(`printing current day`)
+    // console.log(current)
+    const isCurrent = (String(weatherState.current.datetimeEpoch).slice(0,6)==String(weatherState.daySelection.datetimeEpoch).slice(0,6))
+    //console.log(isCurrent)
     res.render('index', {
         current: current, 
         weekWeather: weekWeather,
@@ -126,11 +128,11 @@ router.get('/week/:dir', (req,res)=> {
     const weekWeather = weatherState.week(weatherState.currWeek)
     // console.log(`weekWeather for week ${weatherState.currWeek}:`)
     // console.log(weekWeather)
-    const isCurrent = (weatherState.current==weatherState.daySelection)
+    const isCurrent = (String(weatherState.current.datetimeEpoch).slice(0,6)==String(weekWeather[0].datetimeEpoch).slice(0,6))
     const current = weatherState.current
     res.render('index', {
         weekWeather: weekWeather,
-        current: weatherState.daySelection,
+        current: isCurrent ? current : weekWeather[0],
         cToF: cToF,
         isCurrent: isCurrent
     })
@@ -144,10 +146,18 @@ router.get('/day/:id', (req,res)=> {
     }
     const weekWeather = weatherState.week(weatherState.currWeek)
     weatherState.daySelection = weekWeather[dayNum]
-    //console.log(weatherState.daySelection)
-    const isCurrent = (weatherState.current==weatherState.daySelection)
+    console.log('printing dayselect')
+    console.log(weatherState.daySelection)
+    let first = String(weatherState.current.datetimeEpoch).slice(0,6)
+    console.log(first)
+    let second = String(weatherState.daySelection.datetimeEpoch).slice(0,6)
+    console.log(second)
+    const isCurrent = (first==second)
+    console.log('printing current: ')
+    console.log(weatherState.current)
+    console.log(`day selected is current: ${isCurrent}`)
     res.render('index', {
-        current: weatherState.daySelection, 
+        current: isCurrent?  weatherState.current : weatherState.daySelection, 
         weekWeather: weekWeather,
         cToF: cToF,
         isCurrent: isCurrent
