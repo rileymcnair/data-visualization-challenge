@@ -4,6 +4,10 @@ const router = express.Router()
 
 const axios = require('axios')
 
+function compareDays(epochNum1, epochNum2) {
+    // if first 6 digits of epoch match, they are the same day
+    return (String(epochNum1).slice(0,6)==String(epochNum2).slice(0,6))
+}
 
 function cToF(celsius) {
     return Math.round(celsius * 9 / 5 + 32);
@@ -104,7 +108,9 @@ router.get('/', (req,res) => {
     const current = weatherState.current
     // console.log(`printing current day`)
     // console.log(current)
-    const isCurrent = (String(weatherState.current.datetimeEpoch).slice(0,6)==String(weatherState.daySelection.datetimeEpoch).slice(0,6))
+
+    const isCurrent = compareDays(weatherState.current.datetimeEpoch, weatherState.daySelection.datetimeEpoch)
+
     //console.log(isCurrent)
     res.render('index', {
         current: current, 
@@ -121,15 +127,14 @@ router.get('/week/:dir', (req,res)=> {
         weatherState.currWeek++
     else if (direction == 'prev' && weatherState.currWeek>0)
         weatherState.currWeek--
-    // week*7 will give the the day for the start of the week
-    //supports two weeks: 0 (current week) and 1 (next week)
-    // if week is 0, will give us day 0
-    // if week is 1, will give us day 1
+    
     const weekWeather = weatherState.week(weatherState.currWeek)
     // console.log(`weekWeather for week ${weatherState.currWeek}:`)
     // console.log(weekWeather)
-    const isCurrent = (String(weatherState.current.datetimeEpoch).slice(0,6)==String(weekWeather[0].datetimeEpoch).slice(0,6))
+
+    const isCurrent = compareDays(weatherState.current.datetimeEpoch, weekWeather[0].datetimeEpoch)
     const current = weatherState.current
+    
     res.render('index', {
         weekWeather: weekWeather,
         current: isCurrent ? current : weekWeather[0],
@@ -146,16 +151,13 @@ router.get('/day/:id', (req,res)=> {
     }
     const weekWeather = weatherState.week(weatherState.currWeek)
     weatherState.daySelection = weekWeather[dayNum]
-    console.log('printing dayselect')
-    console.log(weatherState.daySelection)
-    let first = String(weatherState.current.datetimeEpoch).slice(0,6)
-    console.log(first)
-    let second = String(weatherState.daySelection.datetimeEpoch).slice(0,6)
-    console.log(second)
-    const isCurrent = (first==second)
-    console.log('printing current: ')
-    console.log(weatherState.current)
-    console.log(`day selected is current: ${isCurrent}`)
+    // console.log('printing dayselect')
+    // console.log(weatherState.daySelection)
+    
+    const isCurrent = compareDays(weatherState.current.datetimeEpoch, weatherState.daySelection.datetimeEpoch)
+    // console.log('printing current: ')
+    // console.log(weatherState.current)
+    // console.log(`day selected is current: ${isCurrent}`)
     res.render('index', {
         current: isCurrent?  weatherState.current : weatherState.daySelection, 
         weekWeather: weekWeather,
