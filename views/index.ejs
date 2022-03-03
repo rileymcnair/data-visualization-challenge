@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,51 +8,115 @@
     <title>FutureCast</title>
 
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!-- bootsrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- d3 data visualization-->
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <!-- local bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
+
 <body>
-    <!-- test header to see if bootstrap working -->
     <nav class="navbar navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">FutureCast</a>
+        <a class="navbar-brand" href="/">FutureCast</a>
     </nav>
-    
-    <div class="topbar">
-        <a href="/week/prev">prev week </a>
-        <a href="/week/next">next week</a>
-        <a href="/day/0"><%= weekWeather[0].datetime %> Temp: <%= cToF(weekWeather[0].tempmax) %> </a>
-        <a href="/day/1"><%= weekWeather[1].datetime %> <%= cToF(weekWeather[1].tempmax) %> </a>
-        <a href="/day/2"><%= weekWeather[2].datetime %> <%= cToF(weekWeather[2].tempmax) %> </a>
-        <a href="/day/3"><%= weekWeather[3].datetime %> <%= cToF(weekWeather[3].tempmax) %> </a>
-        <a href="/day/4"><%= weekWeather[4].datetime %> <%= cToF(weekWeather[4].tempmax )%> </a>
-        <a href="/day/5"><%= weekWeather[5].datetime %> <%= cToF(weekWeather[5].tempmax) %> </a>
-        <a href="/day/6"><%= weekWeather[6].datetime %> <%= cToF(weekWeather[6].tempmax) %> </a>
+
+    <div class="select-nav container-fluid d-flex justify-content-between">
+        <i onclick="window.location.href='/week/prev'" class="bi bi-chevron-left"></i>
+        <% for (var i=0; i<7; i++) { %>
+            <div>
+                <p class="select-date">
+                    <%=weekWeather[i].datetime %>
+                </p>
+                <a class="card select-card d-flex justify-content-center align-items-center" href=<%=`/day/${i}`%> >
+                <%=cToF(weekWeather[i].tempmax) %>
+                </a>
+            </div>
+            <% } %>
+                <i onclick="window.location.href='/week/next'" class="bi bi-chevron-right"></i>
     </div>
-    <div class="day-card">
-        <h1>temp: <%= isCurrent? cToF(current.temp) : cToF(current.tempmax) %> </h1>
+
+
+
+    <div class="d-flex flex-wrap justify-content-around">
+        <div class="card rounded card-data">
+            <div class="card-body">
+                <h5 class="card-title text-center">Weather this week in Los Angeles, CA</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                    card's content.</p>
+                <button type="button" class="btn btn-primary">Button</button>
+            </div>
+        </div>
+        <div class="card rounded card-data">
+            <h5 class="card-header">temp: <%= isCurrent? cToF(current.temp) : cToF(current.tempmax) %>
+            </h5>
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                    card's content.</p>
+                <button type="button" class="btn btn-primary">Button</button>
+            </div>
+        </div>
     </div>
 
     <style>
         .topbar {
-            margin: 10px 10px;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .card-data {
+            min-width: 500px;
+            width: 45%;
+            height: 600px;
+        }
+
+        .select-card {
+            width: 70px;
+            height: 100px;
+            text-decoration: none;
+            color: black;
+            font-size: 20px;
+        }
+        
+
+        .select-date {
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .select-nav {
+            /* margin: 10px 10px;
             display: flex;
             column-gap: 10px;
-            flex-wrap: wrap;
+            flex-wrap: wrap; */
+            border-bottom: 0.5px solid lightgrey;
+            margin-bottom: 10px;
         }
-        .topbar > a {
-            border: 1px solid blue;
-        }
+
         .day-card {
             margin: 20px 20px;
             height: 500px;
             border: 1px solid blue;
+
+        }
+
+        i {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer
         }
     </style>
 
 </body>
-</html>
-<script src="/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-      
-<!-- <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script> -->
 
+</html>
+<script src="/docs/5.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script> -->

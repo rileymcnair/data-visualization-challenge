@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
-const PORT = 3000
+const PORT = 4000
 const axios = require('axios')
 
 //middleware
