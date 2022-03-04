@@ -27,11 +27,11 @@
 
     <div class="select-nav container-fluid d-flex justify-content-around">
         <i onclick="window.location.href='/week/prev'" class="bi bi-chevron-left"></i>
-        <% for (var i=0; i<7; i++) { %>
+        <% for (let i=0; i<7; i++) { %>
             <div class="mt-2 mb-2">
                 <p class="select-date">
-                    <% function getDate(dateString) {
-                        let date = new Date(dateString)
+                    <% function getDate(epochTime) {
+                        let date = new Date(epochTime*1000)
                         const options = {
                             timeZone: 'America/Los_Angeles',
                             month: 'short', day: 'numeric',
@@ -41,7 +41,7 @@
                         return formatted
                         }
                     %>
-                    <%= (isCurrent && i==0)? "Today": getDate(weekWeather[i].datetime) %>
+                    <%= (isCurrent && i==0)? "Today": getDate(weekWeather[i].datetimeEpoch) %>
                 </p>
                 <a class="card select-card d-flex justify-content-center align-items-center" href=<%=`/day/${i}`%>>
                 <%=cToF(weekWeather[i].tempmax) %>
@@ -67,7 +67,7 @@
         <div class="card rounded card-data">
             <h5 class="card-header">Week Overview</h5>
             <div class="card-body">
-                <h5 class="card-title text-center mt-3">This week in Los Angeles, CA</h5>
+                <h5 class="card-title text-center mt-3">Los Angeles, CA</h5>
                 <div class="chart-wrapper p-0 m-0">
                     <div class="histogram p-0 m-0">
                         <% for (var i=0; i<7; i++) { %>
@@ -84,7 +84,7 @@
 
         <div class="card rounded card-data">
             <h5 class="card-header">
-                Weather Report: <%= isCurrent? "Today, " + new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) : getDate(current.datetime)%>
+                Weather Report: <%= isCurrent? "Today, " + new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) : getDate(current.datetimeEpoch)%>
             </h5>
             <div class="card-body">
                 <% iconMap = {

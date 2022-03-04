@@ -1,18 +1,18 @@
 const express = require('express')
-
 const router = express.Router()
-
 const axios = require('axios')
+require('dotenv').config();
 
+//helper functions
 function compareDays(epochNum1, epochNum2) {
-    // if first 6 digits of epoch match, they are the same day
-    return (String(epochNum1).slice(0,6)==String(epochNum2).slice(0,6))
+    let date1 = new Date(epochNum1*1000)
+    let date2 = new Date(epochNum2*1000)
+    //same day if the first ten characters match: '2022-03-04'=='2022-03-04'
+    return String(date1).split('T')[0].slice(0,11) == String(date2).split('T')[0].slice(0,11)
 }
-
 function cToF(celsius) {
     return Math.round(celsius * 9 / 5 + 32);
 }
-
 function getDate(dayOffset) {
     let date = new Date()
     date.setDate(date.getDate() + dayOffset)
@@ -27,6 +27,7 @@ function getDate(dayOffset) {
     let yyyy = tzDate.slice(6,10)
     return `${yyyy}-${mm}-${dd}` //formats in 'yyyy-mm-dd'
 }
+
 
 class WeatherData {
     constructor(current, days) {
@@ -46,6 +47,7 @@ class WeatherData {
 
 }
 
+//for dev testing:
 const {data} = require('../data.js')
 const {current} = require('../data.js')
 const DATA = data()
@@ -54,28 +56,29 @@ var weatherState = new WeatherData(currentData, DATA)
 
 
 
-// var weatherState = new WeatherData()
-// let startDate = getDate(-7)
-//     let endDate = getDate(13)
-//     axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/los%20angeles/${startDate}/${endDate}?unitGroup=metric&include=days%2Ccurrent&key=HZB6V4P3UHRCK3L6K84WKYPHS&contentType=json`)
+//since using free tier, only update data on start
+var weatherState = new WeatherData()
+let startDate = getDate(-7)
+    let endDate = getDate(13)
+    axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/los%20angeles/${startDate}/${endDate}?unitGroup=metric&include=days%2Ccurrent&key=${process.env.apiKey}&contentType=json`)
 
-//     .then( apires => {
-//         const current = apires.data.currentConditions
-//         console.log(current)
-//         const currentTemp = current.temp
-//         const currentWindSpeed = current.windspeed
-//         const currentCondition = current.conditions
-//         const currentHumidity = current.humidity
-//         const days = apires.data.days // list of daily forecasts
-//         console.log(days)
-//         weatherState = new WeatherData(current, days)
-//     })
-//     .catch(err => {
-//         console.log(err)
-//     })
+    .then( apires => {
+        const current = apires.data.currentConditions
+        console.log(current)
+        const currentTemp = current.temp
+        const currentWindSpeed = current.windspeed
+        const currentCondition = current.conditions
+        const currentHumidity = current.humidity
+        const days = apires.data.days // list of daily forecasts
+        console.log(days)
+        weatherState = new WeatherData(current, days)
+    })
+    .catch(err => {
+        console.log(err)
+    })
 
 
-//update weather data on every render
+//update weather data on every render if 
 // router.get('*', (req,res, next) => {
 //     let startDate = getDate(-7)
 //     console.log(`startDate: ${startDate}`)
@@ -99,17 +102,12 @@ var weatherState = new WeatherData(currentData, DATA)
 //     })
 // })
 
+
 router.get('/', (req,res) => {
-    //console.log(weatherState.days)
     weatherState.currWeek = 1
     const weekWeather = weatherState.week(weatherState.currWeek)
-    // console.log('printing weather for the week')
-    // console.log(weekWeather)
     const current = weatherState.current
-    // console.log(`printing current day`)
-    // console.log(current)
 
-    //console.log(isCurrent)
     res.render('index', {
         current: current, 
         weekWeather: weekWeather,
@@ -127,8 +125,6 @@ router.get('/week/:dir', (req,res)=> {
         weatherState.currWeek--
     
     const weekWeather = weatherState.week(weatherState.currWeek)
-    // console.log(`weekWeather for week ${weatherState.currWeek}:`)
-    // console.log(weekWeather)
 
     const isCurrent = compareDays(weatherState.current.datetimeEpoch, weekWeather[0].datetimeEpoch)
     const current = weatherState.current
@@ -149,13 +145,9 @@ router.get('/day/:id', (req,res)=> {
     }
     const weekWeather = weatherState.week(weatherState.currWeek)
     weatherState.daySelection = weekWeather[dayNum]
-    // console.log('printing dayselect')
-    // console.log(weatherState.daySelection)
     
     const isCurrent = compareDays(weatherState.current.datetimeEpoch, weatherState.daySelection.datetimeEpoch)
-    // console.log('printing current: ')
-    // console.log(weatherState.current)
-    // console.log(`day selected is current: ${isCurrent}`)
+
     res.render('index', {
         current: isCurrent?  weatherState.current : weatherState.daySelection, 
         weekWeather: weekWeather,
