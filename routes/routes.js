@@ -29,7 +29,6 @@ function getDate(dayOffset) {
     return `${yyyy}-${mm}-${dd}` //formats in 'yyyy-mm-dd'
 }
 
-
 class WeatherData {
     constructor(current, days) {
         this.current = current
@@ -37,10 +36,7 @@ class WeatherData {
         this.currWeek = 1
         this.daySelection = current
     }
-    *getTemp() {
-        return this.current.temp
-    }
-  
+
     week(weekNum) {
         let startDay = weekNum * 7
         return this.days.slice(startDay, startDay + 7)
@@ -48,33 +44,33 @@ class WeatherData {
 
 }
 
-//for dev testing:
-// const {data} = require('../data.js')
-// const {current} = require('../data.js')
-// const DATA = data()
-// const currentData = current()
-// var weatherState = new WeatherData(currentData, DATA)
+//for low cost development:
+const {data} = require('../data.js')
+const {current} = require('../data.js')
+const DATA = data()
+const currentData = current()
+var weatherState = new WeatherData(currentData, DATA)
 
 
 
 //since using free tier, only update data on start
-var weatherState = new WeatherData()
-let startDate = getDate(-7)
-    let endDate = getDate(13)
-    axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/los%20angeles/${startDate}/${endDate}?unitGroup=metric&include=days%2Ccurrent&key=${process.env.apiKey}&contentType=json`)
+// var weatherState = new WeatherData()
+// let startDate = getDate(-7)
+//     let endDate = getDate(13)
+//     axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/los%20angeles/${startDate}/${endDate}?unitGroup=metric&include=days%2Ccurrent&key=${process.env.apiKey}&contentType=json`)
 
-    .then( apires => {
-        const current = apires.data.currentConditions
-        const currentTemp = current.temp
-        const currentWindSpeed = current.windspeed
-        const currentCondition = current.conditions
-        const currentHumidity = current.humidity
-        const days = apires.data.days // list of daily forecasts
-        weatherState = new WeatherData(current, days)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+//     .then( apires => {
+//         const current = apires.data.currentConditions
+//         const currentTemp = current.temp
+//         const currentWindSpeed = current.windspeed
+//         const currentCondition = current.conditions
+//         const currentHumidity = current.humidity
+//         const days = apires.data.days // list of daily forecasts
+//         weatherState = new WeatherData(current, days)
+//     })
+//     .catch(err => {
+//         console.log(err)
+//     })
 
 
 //update weather data on every render if 
@@ -139,12 +135,15 @@ router.get('/week/:dir', (req,res)=> {
 router.get('/day/:id', (req,res)=> {
     const day = req.params.id //convert day number to int
     const dayNum = Number(day)
-    if(!day){
+    if(!dayNum || dayNum<0 || dayNum>6){
         console.log('invalid day')
+        res.sendStatus(404)
     }
     const weekWeather = weatherState.week(weatherState.currWeek)
+   
     weatherState.daySelection = weekWeather[dayNum]
-    
+    if (!weekWeather[dayNum])
+        res.sendStatus(404)
     const isCurrent = compareDays(weatherState.current.datetimeEpoch, weatherState.daySelection.datetimeEpoch)
 
     res.render('index', {
@@ -156,5 +155,5 @@ router.get('/day/:id', (req,res)=> {
 })
 
 
-module.exports = router
+module.exports = {router, cToF, compareDays}
 
