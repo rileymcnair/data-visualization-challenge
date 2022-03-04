@@ -109,14 +109,12 @@ router.get('/', (req,res) => {
     // console.log(`printing current day`)
     // console.log(current)
 
-    const isCurrent = compareDays(weatherState.current.datetimeEpoch, weatherState.daySelection.datetimeEpoch)
-
     //console.log(isCurrent)
     res.render('index', {
         current: current, 
         weekWeather: weekWeather,
         cToF: cToF, //celsius to fahrenheit function
-        isCurrent: isCurrent
+        isCurrent: true
     })
 })
 

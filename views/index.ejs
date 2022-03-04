@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FutureCast</title>
+    <title>FutureCast - Data visualization tool</title>
 
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <!-- bootsrap icons -->
@@ -18,18 +18,33 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">FutureCast</a>
+    <%- include('functions'); -%> 
+    <nav class="navbar" style="background-color:#2774AE;">
+        <div class='d-flex align-items-center' style="height:100%;">
+        <a class="navbar-brand" href="/" style="color:white;margin-left:10px;" >FutureCast</a>
+        <p class="navbar-text m-0 p-0" style="color:white; font-size: 12px;">| A Data Visualization Tool</p>
+        </div>
     </nav>
 
-    <div class="select-nav container-fluid d-flex justify-content-between">
+    <div class="select-nav container-fluid d-flex justify-content-around">
         <i onclick="window.location.href='/week/prev'" class="bi bi-chevron-left"></i>
         <% for (var i=0; i<7; i++) { %>
-            <div>
+            <div class="mt-2 mb-2">
                 <p class="select-date">
-                    <%=weekWeather[i].datetime %>
+                    <% function getDate(dateString) {
+                        let date = new Date(dateString)
+                        const options = {
+                            timeZone: 'America/Los_Angeles',
+                            month: 'short', day: 'numeric',
+                        }
+                        //LA timezone date in format 'mm/dd/yyyy'
+                        let formatted = date.toLocaleDateString('en-US', options)
+                        return formatted
+                        }
+                    %>
+                    <%= (isCurrent && i==0)? "Today": getDate(weekWeather[i].datetime) %>
                 </p>
-                <a class="card select-card d-flex justify-content-center align-items-center" href=<%=`/day/${i}`%> >
+                <a class="card select-card d-flex justify-content-center align-items-center" href=<%=`/day/${i}`%>>
                 <%=cToF(weekWeather[i].tempmax) %>
                 </a>
             </div>
@@ -38,37 +53,129 @@
     </div>
 
 
-
-    <div class="d-flex flex-wrap justify-content-around">
+    <div class="parent d-flex flex-wrap justify-content-around">
         <div class="card rounded card-data">
             <div class="card-body">
-                <h5 class="card-title text-center">Weather this week in Los Angeles, CA</h5>
+                <h5 class="card-title text-center">This week in Los Angeles, CA</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
                     card's content.</p>
                 <button type="button" class="btn btn-primary">Button</button>
             </div>
         </div>
+
         <div class="card rounded card-data">
-            <h5 class="card-header">temp: <%= isCurrent? cToF(current.temp) : cToF(current.tempmax) %>
+            <h5 class="card-header">
+                Weather Report: <%= (isCurrent? "Today, " : "") + new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) %>
             </h5>
             <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <button type="button" class="btn btn-primary">Button</button>
+                <% iconMap = {
+                    'clear-day': "sun",'clear-night': 'moon','cloudy': 'cloudy','fog': 'cloud-fog2','hail': 'cloud-hail',
+                    'snow': 'snow','rain': 'cloud-rain','wind': "wind",'partly-cloudy-day': 'cloud-sun','party-cloudy-night': 'moon',
+                }%>
+                <div class="d-flex mt-3 mb-4 align-items-center">
+                    <i class="mb-1 bi bi-<%=iconMap[current.icon]%>" style="font-size:80px;margin-right:30%;margin-left:10%;color:#0166b3;cursor:default;"></i> 
+                    <h3 class="card-title m-0" style="font-weight:400;font-size:3rem;">
+                        <%= isCurrent? cToF(current.temp) : cToF(current.tempmax) %>&#176;
+                    </h3>
+                </div>
+                <% function computeWarmer() {
+                        const currTemp = isCurrent? current.temp : current.tempmax
+                        let count = 0
+                        for (const day of weekWeather)
+                            if (currTemp > day.tempmax) 
+                                count++
+                        return Math.round((count/6.0) * 100 ) 
+                    }
+                %> 
+                <div class="comparison mb-4 d-flex justify-content-center align-items-center" style="margin-left:10%; column-gap:10%;">
+                    <div class="pie d-flex flex-column justify-content-center">
+                        <h3 class="mb-1 text-center" style="color: #2774AE"> <%= computeWarmer() %>% </h3>
+                        <svg viewBox="0 0 32 32">
+                            <circle id="circle"r="16" cx="16" cy="16" 
+                            style="stroke-dasharray: <%=computeWarmer() %> 100" />
+                        </svg>
+                    </div>
+                    <p class="m-0 p-0" style="font-size:1rem">
+                        Warmer than 
+                        <i style="display:inline;color:black;cursor:text;font-size:1.5rem"><%=computeWarmer()%>%</i> 
+                        of the other days in the week
+                    </p>
+                
+                </div>
+                
+                <div class="meters-container mt-5">
+                    <div class="meter" >
+                        <label for="humidity d-flex align-items-center" style="margin-right:20px;display:inline-block">Humidity:</label>
+                        <div style="background-color:rgb(199, 199, 199);width:35%;height:30px;display:inline-block;margin-right:10px;">
+                            <div style="background-color:#2774AE;height:100%; width: <%= Math.max(current.humidity, 3) %>%"></div>
+                        </div>
+                        <p class="m-0 p-0 align-middle" style="display:inline-block"><%=current.humidity%>%</p>
+                    </div>
+                    <div class="meter">
+                        <label for="wind-speed d-flex align-items-center" style="margin-right:20px;display:inline-block">Wind Speed:</label>
+                        <div style="background-color:rgb(199, 199, 199);width:35%;height:30px;display:inline-block;margin-right:10px;">
+                            <div style="background-color:#2774AE;height:100%; width: <%= Math.max(current.windspeed, 3)%>%"></div>
+                        </div>
+                        <p class="m-0 p-0 align-middle" style="display:inline-block"><%=current.windspeed%> mph</p>
+                    </div>
+                    
+                    <!-- <div class="meter mb-2 d-flex align-items-center">
+                        <label for="humidity" style="margin-right:20px">Humidity</label>
+                        <div style="background-color:rgb(199, 199, 199);width:100px;height:30px;">
+                            <div style="background-color:#2774AE; width:20%;height:100%;"></div>
+                    </div> -->
+                </div>
             </div>
         </div>
     </div>
 
     <style>
-        .topbar {
-            margin: 0;
-            padding: 0;
-            width: 100%;
+        @media screen and (max-width: 700px) {
+            .select-card {
+                width: 35px !important;
+                height: 50px !important;
+            }
+            .select-date {
+                font-size: 0.7rem !important;
+            }
+            .select-card {
+                font-size: 1rem  !important;
+            }
+            .select-nav {
+                margin: 0 5px !important;
+                padding: 0 !important;
+                margin-bottom: 10px !important;
+            }
         }
 
+        .parent > .card {
+            margin-bottom: 20px;
+        }
+
+        .meter {
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            width:100%;
+            min-height:30px;
+        }
+
+        svg {
+            width: 70px; height: 70px;
+            transform: rotate(-90deg);
+            background: rgb(199, 199, 199);
+            border-radius: 50%;
+        }
+
+        circle {
+            fill: rgb(199, 199, 199);
+            stroke: #2774AE;
+            stroke-width: 32;
+            stroke-dasharray: 17 100; /* first number sets percentage to fill */
+        }
         .card-data {
-            min-width: 500px;
+            min-width:350px;
             width: 45%;
             height: 600px;
         }
@@ -79,28 +186,26 @@
             text-decoration: none;
             color: black;
             font-size: 20px;
+            flex: 1;
+            background-color: #FAFAFA;
         }
         
-
         .select-date {
-            font-size: 12px;
+            font-size: 1rem;
             margin: 0;
+            text-align: center;
+            color: #444444;
         }
 
         .select-nav {
-            /* margin: 10px 10px;
-            display: flex;
-            column-gap: 10px;
-            flex-wrap: wrap; */
             border-bottom: 0.5px solid lightgrey;
-            margin-bottom: 10px;
+            margin-bottom: 10px; 
         }
 
         .day-card {
             margin: 20px 20px;
             height: 500px;
             border: 1px solid blue;
-
         }
 
         i {
@@ -108,7 +213,7 @@
             justify-content: center;
             align-items: center;
             font-size: 30px;
-            cursor: pointer
+            cursor: pointer;
         }
     </style>
 
