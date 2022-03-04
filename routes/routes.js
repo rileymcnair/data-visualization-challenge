@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const axios = require('axios')
 require('dotenv').config();
+require('dotenv')
 
 //helper functions
 function compareDays(epochNum1, epochNum2) {
@@ -48,11 +49,11 @@ class WeatherData {
 }
 
 //for dev testing:
-const {data} = require('../data.js')
-const {current} = require('../data.js')
-const DATA = data()
-const currentData = current()
-var weatherState = new WeatherData(currentData, DATA)
+// const {data} = require('../data.js')
+// const {current} = require('../data.js')
+// const DATA = data()
+// const currentData = current()
+// var weatherState = new WeatherData(currentData, DATA)
 
 
 
@@ -64,13 +65,11 @@ let startDate = getDate(-7)
 
     .then( apires => {
         const current = apires.data.currentConditions
-        console.log(current)
         const currentTemp = current.temp
         const currentWindSpeed = current.windspeed
         const currentCondition = current.conditions
         const currentHumidity = current.humidity
         const days = apires.data.days // list of daily forecasts
-        console.log(days)
         weatherState = new WeatherData(current, days)
     })
     .catch(err => {
