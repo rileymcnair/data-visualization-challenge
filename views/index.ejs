@@ -14,7 +14,7 @@
     <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
     <!-- local bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    
 </head>
 
 <body>
@@ -55,17 +55,18 @@
 
     <div class="parent d-flex flex-wrap justify-content-around">
         <div class="card rounded card-data">
+            <h5 class="card-header">Week Overview</h5>
             <div class="card-body">
-                <h5 class="card-title text-center">This week in Los Angeles, CA</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
-                <button type="button" class="btn btn-primary">Button</button>
+                <h5 class="card-title text-center mt-3">This week in Los Angeles, CA</h5>
+                <div>
+
+                </div>
             </div>
         </div>
 
         <div class="card rounded card-data">
             <h5 class="card-header">
-                Weather Report: <%= (isCurrent? "Today, " : "") + new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) %>
+                Weather Report: <%= isCurrent? "Today, " + new Date().toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) : getDate(current.datetime)%>
             </h5>
             <div class="card-body">
                 <% iconMap = {
@@ -134,12 +135,10 @@
             .select-card {
                 width: 35px !important;
                 height: 50px !important;
+                font-size: 1rem  !important;
             }
             .select-date {
                 font-size: 0.7rem !important;
-            }
-            .select-card {
-                font-size: 1rem  !important;
             }
             .select-nav {
                 margin: 0 5px !important;
@@ -177,12 +176,12 @@
         .card-data {
             min-width:350px;
             width: 45%;
-            height: 600px;
+            min-height: 200px;
         }
 
         .select-card {
             width: 70px;
-            height: 100px;
+            height: 90px;
             text-decoration: none;
             color: black;
             font-size: 20px;
@@ -220,8 +219,3 @@
 </body>
 
 </html>
-<script src="/docs/5.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-    crossorigin="anonymous"></script>
-
-<!-- <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script> -->
