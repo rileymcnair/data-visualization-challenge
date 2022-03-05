@@ -78,7 +78,7 @@ let startDate = getDate(-7)
 //     let startDate = getDate(-7)
 //     console.log(`startDate: ${startDate}`)
 //     let endDate = getDate(13)
-//     axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/los%20angeles/${startDate}/${endDate}?unitGroup=metric&include=days%2Ccurrent&key=HZB6V4P3UHRCK3L6K84WKYPHS&contentType=json`)
+//     axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/los%20angeles/${startDate}/${endDate}?unitGroup=metric&include=days%2Ccurrent&key=${process.env.apiKey}&contentType=json`)
 //     .then( apires => {
 //         const current = apires.data.currentConditions
 //         const currentTemp = current.temp
