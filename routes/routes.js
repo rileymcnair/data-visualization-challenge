@@ -45,32 +45,32 @@ class WeatherData {
 }
 
 //for low cost development:
-const {data} = require('../data.js')
-const {current} = require('../data.js')
-const DATA = data()
-const currentData = current()
-var weatherState = new WeatherData(currentData, DATA)
+// const {data} = require('../data.js')
+// const {current} = require('../data.js')
+// const DATA = data()
+// const currentData = current()
+// var weatherState = new WeatherData(currentData, DATA)
 
 
 
 //since using free tier, only update data on start
-// var weatherState = new WeatherData()
-// let startDate = getDate(-7)
-//     let endDate = getDate(13)
-//     axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/los%20angeles/${startDate}/${endDate}?unitGroup=metric&include=days%2Ccurrent&key=${process.env.apiKey}&contentType=json`)
+var weatherState = new WeatherData()
+let startDate = getDate(-7)
+    let endDate = getDate(13)
+    axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/los%20angeles/${startDate}/${endDate}?unitGroup=metric&include=days%2Ccurrent&key=${process.env.apiKey}&contentType=json`)
 
-//     .then( apires => {
-//         const current = apires.data.currentConditions
-//         const currentTemp = current.temp
-//         const currentWindSpeed = current.windspeed
-//         const currentCondition = current.conditions
-//         const currentHumidity = current.humidity
-//         const days = apires.data.days // list of daily forecasts
-//         weatherState = new WeatherData(current, days)
-//     })
-//     .catch(err => {
-//         console.log(err)
-//     })
+    .then( apires => {
+        const current = apires.data.currentConditions
+        const currentTemp = current.temp
+        const currentWindSpeed = current.windspeed
+        const currentCondition = current.conditions
+        const currentHumidity = current.humidity
+        const days = apires.data.days // list of daily forecasts
+        weatherState = new WeatherData(current, days)
+    })
+    .catch(err => {
+        console.log(err)
+    })
 
 
 //update weather data on every render if 
