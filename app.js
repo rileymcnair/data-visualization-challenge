@@ -10,8 +10,8 @@ app.use(express.static('public'))
 
 app.set('view engine', 'ejs')
 
-const routes = require('./routes/routes')
-app.use('/', routes)
+const {router} = require('./routes/routes')
+app.use('/', router)
 
 app.listen(PORT, () => {
     console.log(`Express is running on port ${PORT}`)
