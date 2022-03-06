@@ -1,6 +1,6 @@
 const request = require('supertest')
 const express = require('express')
-const router = require('./routes/routes.js')
+const {router} = require('./routes/routes.js')
 const app = express()
 app.use('/', router)
 
@@ -22,7 +22,6 @@ test('compare different days', () => {
             diffDay, new Date().getTime())).toBe(false)
 })
 
-//for some reason keeps throwing error: requires middleware but go an object
 test('day request must have id between 0 and 6', function() {
     return request(app)
         .get('/day/7')
