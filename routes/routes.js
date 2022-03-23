@@ -143,7 +143,7 @@ router.get('/day/:id', (req,res)=> {
    
     weatherState.daySelection = weekWeather[dayNum]
     if (!weekWeather[dayNum])
-        res.sendStatus(404)
+        //res.sendStatus(404)
     const isCurrent = compareDays(weatherState.current.datetimeEpoch, weatherState.daySelection.datetimeEpoch)
 
     res.render('index', {
